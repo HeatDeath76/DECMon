@@ -79,4 +79,6 @@ or planned for future versions.
 
 ## License
 
-See `LICENSE`.
+See `LICENSE.txt`.
+
+This repository is the official upstream repository for DECMon.
