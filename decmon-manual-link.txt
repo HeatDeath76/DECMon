@@ -1,0 +1,5 @@
+A live work-in-progress Google Doc of the full DECMon reference manual can be found at 
+
+https://docs.google.com/document/d/1Cel8pQpyGVlJEpE3ZFmLKzKTJJ3J334Rm0BwjP__fa4/edit?usp=sharing
+
+This will be exported to PDF and available here as new sections are added.
