@@ -43,7 +43,7 @@ SUPPRESS [ON|OFF]         Show/change write suppression
 
 ASSEMBLER ENTRY
 ---------------
-<addr> <byte> [address|byte] [byte] 
+<addr> <byte> [addr|byte] [byte] 
                           Write one instruction directly using byte/address values
                           (SUPPRESS applies)
                           (triggered by pressing return in LIST entry)
