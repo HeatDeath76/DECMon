@@ -31,6 +31,9 @@ of machine-language programs directly in memory.
 - `decmon-manual.pdf`  
   Full reference manual and development notes.
 
+- `decmon-manual-link.txt`  
+  Link to the live work-in-progress Google Doc for decmon-manual.pdf.
+
 ## PETSCII Characters
 
 `decmon.prg` contains literal PETSCII control characters on BASIC lines
