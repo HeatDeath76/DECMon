@@ -85,3 +85,7 @@ or planned for future versions.
 See `LICENSE.txt`.
 
 This repository is the official upstream repository for DECMon.
+
+## Contact Me
+
+You can reach me with any questions or suggestions at dsunley@gmail.com
