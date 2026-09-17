@@ -43,10 +43,11 @@ SUPPRESS [ON|OFF]         Show/change write suppression
 
 ASSEMBLER ENTRY
 ---------------
-<addr> <byte> [addr|byte] [byte] 
+[A] <addr> <byte> [addr|byte] [byte] 
                           Write one instruction directly using byte/address values
                           (SUPPRESS applies)
                           (triggered by pressing return in LIST entry)
+                          (omitting A suppresses messages)
 
 
 RANGES / DISPLAY
@@ -84,7 +85,7 @@ LOAD <name> <dev>
 MISC
 ----
 HELP / H / ?              Show command list
-X                         Exit DECMon
+X / EXIT                  Exit DECMon
 
 
 NOTES
