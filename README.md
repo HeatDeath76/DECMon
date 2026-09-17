@@ -37,13 +37,15 @@ of machine-language programs directly in memory.
 ## PETSCII Characters
 
 `decmon.prg` contains literal PETSCII control characters on BASIC lines
-3210, 3250, and 11150.
+3210, 3250, 11470, 11500, 11530, 11555, 11570, amd11590..
 
 These characters are not reproduced in `decmon.bas`.
 
-Lines 3205, 3245, and 11145 immediately precede those lines and document the
-PETSCII characters used by the following line, including how to type them on
-a Commodore 64.
+In all cases, they are a left-cursor keycode immediately prior to the comma in the string literal.
+They are purely cosmetic, and serve purely to cause the comma to be immediately adjacent to the number,
+which is not otherwise possible with PRINT.
+
+Lines 3205 and 3245 show the strings containing the character in visible commented form.
 
 The `.prg` file should therefore be considered authoritative where the text
 listing differs from the original tokenized BASIC program.
