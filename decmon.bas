@@ -4,11 +4,11 @@
 23 print
 25 print"   * type help/h/? for command list *"
 30 b1$="":b2$="  ":rem pokeable buffers
-35 sp=0:bf=0
+35 sp=0:bf=0:sm=0
 40 def fnr(x)=(x/16-int(x/16))*16
 50 suppress=0:r1=-1:r2=-1:sy=-1
 60 ifsp<>1thenprint:print"decmon."
-65 qm=-1:sep=1:dx=0:sp=0
+65 qm=-1:sep=1:dx=0:sp=0:sm=0
 70 fori=0to10:o$(i)="":nexti
 80 sys 65487:c=peek(780)
 90 ifc=13 then print:gosub1000:goto60
@@ -30,7 +30,7 @@
 1010 ifo$(0)="poke"oro$(0)="g"thengoto3100
 1020 ifo$(0)="dp"thengoto3570
 1029 rem exit command
-1030 ifo$(0)="x"thenend
+1030 ifo$(0)="x"oro$(0)="exit"thenend
 1040 ifo$(0)="hd"thengoto1250
 1050 ifo$(0)="dh"thengoto2300
 1060 ifo$(0)="suppress"thengoto2500
@@ -42,7 +42,7 @@
 1130 ifo$(0)="str"thengoto5200
 1200 rem assembler command
 1205 c$=left$(o$(0),1):c=asc(c$)
-1210 if(c>47andc<58)<>0orc$="p"orc$="$"orc$="-"thengoto11000
+1210 if(c>47andc<58)<>0orc$="p"orc$="$"orc$="-"orc$="a"thengoto11000
 1220 ifo$(0)="save"thengoto3700
 1230 ifo$(0)="load"thengoto4070
 1240 ifo$(0)="help"oro$(0)="h"oro$(0)="?"then goto4500
@@ -105,7 +105,7 @@
 1750 if(c<-128orc>65535)andbf=-1thenerr$="?address out of range":bf=0:return
 1760 if(ret<0orret>65535)andbf=0thenerr$="?address out of range":bf=0:return
 1765 if(ret<-128orret>255)andbf=1thenerr$="?byte out of range":bf=0:return
-1768 ifret<0thenret=ret+256:print" "ret-256" =>";ret
+1768 ifret<0thenret=ret+256:ifsm=0thenprint" "ret-256" =>";ret
 1770 bf=0:return
 1900 rem=====num=recognizer===========
 1910 err$="":op=0
@@ -125,7 +125,7 @@
 2030 next i
 2040 iflc$="-"orlc$="+"thenerr$="?exp ends with sign":return
 2050 t=t+mu*s
-2055 ifop=1thenprint " "o$(dx)" =>";t
+2055 ifop=1thenifsm=0thenprint " "o$(dx)" =>";t
 2060 ret=t:return
 2100 rem=====page/offset recognizer===
 2110 err$="":pg=0:of=0:t=0:col=0
@@ -333,7 +333,7 @@
 4501 print"[addr=49152,$c01a,p192:23 byte=173,$ff]":print
 4510 print"suppress [on/off] :suppress pokes, asm"
 4520 print"poke <addr> <byte> [byte...]  :poke"
-4530 print"<addr> <byte> [addr/byte] [byte]: asm"
+4530 print"[a]<addr> <byte> [addr/byte] [byte]:asm"
 4540 print"init/new <addr> <addr> [byte] :fill ram"
 4550 print"sys/run [addr] :run starting at address":print
 4560 print"range [addr addr] :set default list rng"
@@ -349,7 +349,7 @@
 4640 print"twosc <num>  :brnch inter -> two's comp"
 4650 print"mem          :show free memory"
 4660 print"help/h/?     :show this screen"
-4670 print"x            :exit to basic":return
+4670 print"x/exit       :exit to basic":return
 5000 rem=====range=command============
 5010 dx=1:add=-1
 5020 ifo$(dx)<>"" then goto 5050
@@ -453,37 +453,39 @@
 6990 gosub2330:print" ";c$
 7000 return
 11000 rem=====assembler=command=======
-11025 ifdx<1thenprint"asm requires address and byte":return
-11040 byte=-1:b2=-1:b3=-1
-11050 dx=0
+11040 byte=-1:b2=-1:b3=-1:sm=1
+11050 dx=0:ifo$(dx)="a"thendx=dx+1:sm=0
+11055 ifo$(dx+1)=""thenprint"asm requires address and byte":return
 11060 gosub 1700:rem address recognizer
 11070 iferr$<>""thenprinterr$:return
 11080 add=ret
-11090 dx=1:bf=1:gosub 1700:rem byte
+11090 dx=dx+1:bf=1:gosub 1700:rem byte
 11100 iferr$<>""thenprinterr$:return
 11120 byte=ret
-11160 dx=2:bf=-1:ifo$(dx)=""then goto11450
+11160 dx=dx+1:bf=-1:ifo$(dx)=""then goto11450
 11170 gosub 1700:rem address recognizer
 11180 iferr$<>""thenprinterr$:return
 11190 ifret<256thenb2=ret:goto11290
 11200 b3=int(ret/256):b2=ret-(b3*256):goto11450
-11290 dx=3:ifo$(dx)=""then goto11450
+11290 dx=dx+1:ifo$(dx)=""then goto11450
 11300 bf=1:gosub 1700:rem byte recognzr
 11400 iferr$<>""thenprinterr$:return
 11410 b3=ret
 11450 ifsuppress=1thengoto11550
 11460 poke add, byte
-11470 print" poke"add","byte
+11470 ifsm=0thenprint" poke"add","byte
 11480 ifb2=-1thengoto12000
 11490 poke add+1, b2
-11500 print" poke"add+1","b2
+11500 ifsm=0thenprint" poke"add+1","b2
 11510 ifb3=-1thengoto12000
 11520 poke add+2, b3
-11530 print" poke"add+2","b3
+11530 ifsm=0thenprint" poke"add+2","b3
 11540 goto 12000
-11550 print" would poke"add","byte
+11550 ifsm=1thengoto12000
+11555 print" would poke"add","byte
 11560 ifb2=-1thengoto12000
 11570 print" would poke"add+1","b2
 11580 ifb3=-1thengoto12000
 11590 print" would poke"add+2","b3
-12000 sp=1:return
+12000 ifsm=1thensp=1
+12010 return
